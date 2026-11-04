@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="img/avatar.jpg">
+<meta property="og:title" content="Zé do Zero">
+<meta property="og:description" content="O Zé tem R$ 0. Você decide o resto. Série em desenho no Instagram @josedozero.">
+<meta property="og:image" content="img/capa.jpg">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+<title>Zé do Zero</title>
+<meta name="description" content="Série em desenho no Instagram: o Zé tem R$ 0 e os comentários decidem o próximo passo. Coloque seu @ ou sua marca dentro da história.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@500&display=swap">
+<style>
+/* Layout: a sunny cartoon storyboard — HUD hero like the episodes, then bands that switch color the way the scenes do (vote = purple CTA screen, banca = yellow) */
+:root {
+  --paper: #fff6e5;
+  --paper-2: #ffeccc;
+  --ink: #1f1a17;
+  --ink-soft: #5c4f45;
+  --sun: #ffd60a;
+  --laranja: #ff7a1a;
+  --verde: #1e9e4a;
+  --vermelho: #e63946;
+  --azul: #3a86ff;
+  --roxo: #4527a0;
+  --roxo-2: #5b37c4;
+  --white: #ffffff;
+  --f-display: "Lilita One", "Arial Black", system-ui, sans-serif;
+  --f-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --line: 3px solid var(--ink);
+  --pop: 5px 5px 0 var(--ink);
+  --r: 18px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 50; background: var(--paper); }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 72px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; line-height: 1.04; margin: 0; text-wrap: balance; letter-spacing: .005em; }
+h2 { font-size: clamp(34px, 5.6vw, 54px); }
+h2 em, h1 em { font-style: normal; color: var(--laranja); -webkit-text-stroke: 0; }
+.eyebrow { font-family: var(--f-mono); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 12px; display: inline-block; background: var(--ink); color: var(--sun); padding: 4px 10px; border-radius: 6px; }
+.lead { color: var(--ink-soft); max-width: 62ch; font-size: 18px; margin: 14px 0 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--f-body); font-weight: 900; font-size: 17px; padding: 13px 22px; border-radius: 999px; text-decoration: none; border: var(--line); cursor: pointer; transition: transform .12s ease, box-shadow .12s; box-shadow: 3px 3px 0 var(--ink); color: var(--ink); }
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; }
+.btn-sun { background: var(--sun); }
+.btn-verde { background: var(--verde); color: var(--white); }
+.btn-white { background: var(--white); }
+.stamp { display: inline-block; font-family: var(--f-display); text-transform: uppercase; color: var(--vermelho); border: 4px solid var(--vermelho); border-radius: 8px; padding: 2px 12px; transform: rotate(-7deg); background: rgba(255,255,255,.85); letter-spacing: .02em; }
+.stamp.ok { color: var(--verde); border-color: var(--verde); }
+
+/* NAV */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--paper); border-bottom: var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px; }
+.logo { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.logo img { width: 42px; height: 42px; border-radius: 50%; border: var(--line); }
+.logo b { font-family: var(--f-display); font-weight: 400; font-size: 24px; line-height: 1; display: block; }
+.logo b span { color: var(--laranja); }
+.logo small { font-family: var(--f-mono); font-size: 10px; letter-spacing: .16em; color: var(--ink-soft); display: block; margin-top: 2px; }
+.nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; font-weight: 800; font-size: 15px; }
+.nav ul a { text-decoration: none; }
+.nav ul a:hover { color: var(--laranja); }
+.nav .btn { padding: 9px 16px; font-size: 15px; }
+@media (max-width: 900px) { .nav ul { display: none; } }
+@media (max-width: 420px) { .nav .btn { display: none; } }
+
+/* HERO */
+.hero { padding-block: 44px 72px; background: radial-gradient(circle at 78% 40%, var(--sun) 0 18%, transparent 46%), var(--paper); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 44px; align-items: center; }
+.hero h1 { font-size: clamp(44px, 7.4vw, 82px); }
+.hero h1 .zero { display: inline-block; background: var(--vermelho); color: var(--white); padding: 0 .18em; border-radius: .14em; border: var(--line); box-shadow: var(--pop); transform: rotate(-2deg); }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.alert { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 16px; border: var(--line); background: var(--white); border-radius: 14px; font-size: 16px; font-weight: 700; max-width: 560px; }
+.alert .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--vermelho); animation: pulse 1.6s infinite; flex: none; }
+.alert .cd { font-family: var(--f-mono); color: var(--vermelho); font-variant-numeric: tabular-nums; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(230,57,70,.6); } 70% { box-shadow: 0 0 0 10px rgba(230,57,70,0); } 100% { box-shadow: 0 0 0 0 rgba(230,57,70,0); } }
+.phone { position: relative; border-radius: 30px; overflow: hidden; border: 4px solid var(--ink); box-shadow: 10px 10px 0 var(--ink); aspect-ratio: 9/14; max-width: 400px; margin-left: auto; width: 100%; background: var(--ink); }
+.phone > img { width: 100%; height: 100%; object-fit: cover; }
+.hud { position: absolute; left: 0; right: 0; top: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.hud .ep { font-family: var(--f-body); font-weight: 900; font-size: 12px; color: var(--white); text-shadow: 0 0 3px var(--ink), 0 1px 0 var(--ink); letter-spacing: .04em; }
+.hud .pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.pill { font-family: var(--f-body); font-weight: 900; color: var(--white); border: 3px solid var(--white); border-radius: 999px; padding: 4px 14px; font-size: 16px; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 6px; }
+.pill.g { background: var(--verde); }
+.pill.r { background: var(--vermelho); }
+.coin { width: 18px; height: 18px; border-radius: 50%; background: var(--sun); border: 2px solid #b8860b; display: inline-block; }
+.phone .cap { position: absolute; left: 8px; right: 8px; bottom: 26px; text-align: center; font-family: var(--f-body); font-weight: 900; font-size: 26px; text-transform: uppercase; color: var(--white); text-shadow: 0 0 2px var(--ink), 0 3px 0 var(--ink), 3px 0 0 var(--ink), -3px 0 0 var(--ink), 0 -3px 0 var(--ink); }
+.phone .cap span { color: var(--sun); }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .phone { margin: 0 auto; max-width: 340px; } }
+
+/* VOTE — the purple CTA screen of the episodes */
+.vote-band { background: var(--roxo); color: var(--white); border-block: var(--line); }
+.vote-band .lead { color: #ddd3ff; }
+.vote-band h2 em { color: var(--sun); }
+.vote { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+.opt { background: var(--white); color: var(--ink); border: var(--line); border-radius: var(--r); padding: 22px 24px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 18px; box-shadow: var(--pop); align-items: center; }
+.opt .letter { grid-row: span 3; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-display); font-size: 48px; color: var(--white); border: var(--line); align-self: start; }
+.opt.a .letter { background: var(--vermelho); }
+.opt.b .letter { background: var(--azul); }
+.opt .word { font-family: var(--f-display); font-size: clamp(26px, 3.6vw, 36px); line-height: 1; }
+.opt .cost { font-family: var(--f-mono); font-size: 13px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+.opt p { margin: 0; color: var(--ink-soft); font-size: 16px; }
+.vote-foot { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; margin-top: 26px; color: #ddd3ff; font-size: 16px; font-weight: 700; }
+@media (max-width: 680px) { .vote { grid-template-columns: 1fr; } }
+
+/* OFFERS */
+.offers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 32px; }
+.offer { background: var(--white); border: var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--pop); }
+.offer .pic { aspect-ratio: 16/10; overflow: hidden; border-bottom: var(--line); }
+.offer .pic img { width: 100%; height: 100%; object-fit: cover; }
+.offer .body { padding: 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.offer h3 { font-size: 26px; }
+.price { font-family: var(--f-display); font-size: 30px; color: var(--verde); line-height: 1.1; }
+.price small { font-family: var(--f-body); font-size: 14px; color: var(--ink-soft); font-weight: 700; }
+.offer p { margin: 0; color: var(--ink-soft); font-size: 16px; flex: 1; }
+.offer .btn { align-self: flex-start; }
+@media (max-width: 860px) { .offers { grid-template-columns: 1fr; } }
+
+/* BANCA (paid @) */
+.banca-band { background: var(--sun); border-block: var(--line); }
+.banca-band .lead { color: var(--ink); }
+.banca-band h2 em { color: var(--vermelho); }
+.cump { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 40px; margin-top: 36px; align-items: start; }
+.post { background: var(--white); border: var(--line); border-radius: 22px; overflow: hidden; max-width: 380px; box-shadow: var(--pop); }
+.post .head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; font-weight: 800; font-size: 15px; }
+.post .head img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--ink); }
+.post .media { position: relative; aspect-ratio: 4/5; overflow: hidden; border-block: var(--line); }
+.post .media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+.post .media .tag { position: absolute; left: 50%; top: 14%; transform: translateX(-50%) rotate(-3deg); background: var(--white); font-family: var(--f-mono); font-size: 14px; padding: 6px 12px; border-radius: 999px; border: var(--line); white-space: nowrap; box-shadow: 3px 3px 0 var(--ink); }
+.post .txt { padding: 12px 14px 16px; font-size: 15px; color: var(--ink-soft); }
+.post .txt b { color: var(--ink); }
+.post .txt .at { color: var(--azul); font-weight: 800; }
+.benefits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.benefit { border: var(--line); border-radius: 14px; padding: 14px 16px; background: var(--white); }
+.benefit b { font-family: var(--f-display); font-weight: 400; display: block; font-size: 20px; margin-bottom: 2px; }
+.benefit span { color: var(--ink-soft); font-size: 15px; }
+.benefit .k { font-family: var(--f-mono); color: var(--laranja); font-size: 12px; letter-spacing: .12em; display: block; margin-bottom: 4px; }
+.counters { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.counter { flex: 1 1 160px; border-radius: 14px; padding: 12px 16px; background: var(--ink); color: var(--white); }
+.counter b { font-family: var(--f-display); font-weight: 400; font-size: 34px; color: var(--sun); display: block; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.counter span { font-size: 14px; color: #e9e2d8; }
+form { display: grid; gap: 14px; }
+.formcard { background: var(--white); border: var(--line); border-radius: var(--r); padding: 20px; box-shadow: var(--pop); }
+label.f { display: grid; gap: 6px; font-size: 15px; font-weight: 800; }
+input[type=text], input[type=email], select, textarea { width: 100%; background: var(--paper); border: var(--line); border-radius: 12px; padding: 12px 14px; color: var(--ink); font: inherit; font-size: 16px; }
+textarea { min-height: 90px; resize: vertical; }
+.check { display: flex; gap: 10px; font-size: 14px; color: var(--ink-soft); align-items: flex-start; }
+.check input { margin-top: 3px; accent-color: var(--verde); width: 18px; height: 18px; flex: none; }
+.err { color: var(--vermelho); font-size: 15px; font-weight: 800; min-height: 1em; margin: 0; }
+.fine { font-size: 14px; color: var(--ink-soft); margin: 0; }
+.rules { margin-top: 18px; padding: 14px 18px; border: 2px dashed var(--ink); border-radius: 12px; font-size: 15px; color: var(--ink); background: rgba(255,255,255,.55); }
+@media (max-width: 860px) { .cump { grid-template-columns: 1fr; } .post { margin: 0 auto; } }
+@media (max-width: 480px) { .benefits { grid-template-columns: 1fr; } }
+
+/* PIX */
+.pix { margin-top: 16px; border: var(--line); border-radius: var(--r); padding: 20px; background: var(--white); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; box-shadow: var(--pop); }
+.pix .qr { background: var(--white); padding: 10px; border-radius: 12px; border: 2px solid var(--ink); width: 200px; height: 200px; display: grid; place-items: center; }
+.pix .qr canvas, .pix .qr img { width: 176px !important; height: 176px !important; }
+.pix h3 { font-size: 24px; }
+.pix .code { font-family: var(--f-mono); font-size: 12px; word-break: break-all; background: var(--paper); border: 2px solid var(--ink); border-radius: 10px; padding: 10px; max-height: 84px; overflow: auto; color: var(--ink-soft); margin: 10px 0; }
+.pix .row { display: flex; flex-wrap: wrap; gap: 10px; }
+.pix .num { font-family: var(--f-display); font-size: 30px; color: var(--laranja); }
+.warn { border: var(--line); border-radius: 12px; padding: 12px 14px; font-size: 15px; font-weight: 700; background: var(--white); }
+@media (max-width: 560px) { .pix { grid-template-columns: 1fr; justify-items: start; } }
+
+/* PLACA (ranking) */
+.wanted { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; margin-top: 32px; align-items: center; }
+.board { position: relative; border-radius: var(--r); overflow: hidden; border: var(--line); aspect-ratio: 4/5; max-width: 440px; box-shadow: var(--pop); }
+.board img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.board .stamp { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%) rotate(-6deg); font-size: 26px; }
+ol.rank { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; counter-reset: r; }
+ol.rank li { counter-increment: r; display: flex; align-items: center; gap: 14px; background: var(--white); border: var(--line); border-radius: 14px; padding: 10px 16px; }
+ol.rank li::before { content: counter(r, decimal-leading-zero); font-family: var(--f-display); color: var(--laranja); font-size: 22px; width: 30px; }
+ol.rank li .h { font-weight: 800; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+ol.rank li .n { font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft); }
+ol.rank li.empty { color: var(--ink-soft); border-style: dashed; }
+ol.rank li.empty::before { content: "★"; }
+@media (max-width: 860px) { .wanted { grid-template-columns: 1fr; } .board { margin: 0 auto; } }
+
+/* EPISODES */
+.chapters { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; margin-top: 32px; }
+.chap { text-decoration: none; display: grid; gap: 8px; align-content: start; }
+.chap .cv { position: relative; aspect-ratio: 9/16; border-radius: 16px; overflow: hidden; border: var(--line); background: var(--paper-2); box-shadow: 4px 4px 0 var(--ink); }
+.chap .cv img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.chap:hover .cv img { transform: scale(1.04); }
+.chap .cv .stamp { position: absolute; left: 10px; top: 46%; font-size: 15px; border-width: 3px; }
+.chap .meta { font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft); letter-spacing: .06em; }
+.chap .t { font-family: var(--f-display); font-size: 20px; line-height: 1.15; }
+.chap.soon .cv { display: grid; place-items: center; border-style: dashed; box-shadow: none; }
+.chap.soon .cv span { font-family: var(--f-mono); color: var(--ink-soft); font-size: 13px; text-align: center; padding: 12px; }
+
+/* DICAS (real rules) */
+.dicas-band { background: var(--verde); color: var(--white); border-block: var(--line); }
+.dicas-band .lead { color: #dff5e6; }
+.dicas-band h2 em { color: var(--sun); }
+.rastros { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-top: 32px; }
+.rastro { background: var(--white); color: var(--ink); border: var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 8px; align-content: start; box-shadow: var(--pop); }
+.rastro .n { font-family: var(--f-mono); font-size: 12px; color: var(--verde); letter-spacing: .12em; }
+.rastro h3 { font-size: 22px; }
+.rastro p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+.rastro .src { font-family: var(--f-mono); font-size: 11px; color: var(--ink-soft); border-top: 2px dashed var(--ink); padding-top: 8px; }
+.rastro.soon { background: transparent; color: var(--white); border-style: dashed; border-color: var(--white); box-shadow: none; }
+.rastro.soon .n, .rastro.soon p { color: #dff5e6; }
+
+/* ANUNCIE */
+.stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.stat { flex: 1 1 150px; border: var(--line); border-radius: 14px; padding: 12px 16px; background: var(--white); }
+.stat b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 30px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 14px; color: var(--ink-soft); }
+.tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 26px; }
+.tier { background: var(--white); border: var(--line); border-radius: var(--r); padding: 22px; display: grid; gap: 10px; align-content: start; }
+.tier.hl { background: var(--sun); box-shadow: var(--pop); }
+.tier h3 { font-size: 26px; }
+.tier .lim { font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft); letter-spacing: .08em; }
+.tier ul { margin: 0; padding-left: 18px; color: var(--ink); font-size: 15px; display: grid; gap: 4px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 32px; align-items: start; }
+@media (max-width: 860px) { .tiers, .two { grid-template-columns: 1fr; } }
+.slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 26px; }
+.slot { background: var(--white); border: var(--line); border-radius: var(--r); overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.slot .pic { position: relative; aspect-ratio: 9/16; overflow: hidden; border-bottom: var(--line); }
+.slot .pic img { width: 100%; height: 100%; object-fit: cover; }
+.slot .mark { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; text-align: center; font-family: var(--f-display); color: var(--ink); background: var(--sun); border: 3px solid var(--ink); border-radius: 6px; line-height: 1.05; opacity: 0; transition: opacity .25s; padding: 4px; }
+.slot.on .mark { opacity: 1; }
+.slot .hint { position: absolute; transform: translate(-50%, -50%); border: 3px dashed var(--vermelho); border-radius: 8px; background: rgba(255,255,255,.25); transition: opacity .25s; }
+.slot.on .hint { opacity: 0; }
+.slot .body { padding: 16px; display: grid; gap: 8px; align-content: start; }
+.slot .lim { font-family: var(--f-mono); font-size: 12px; color: var(--laranja); letter-spacing: .08em; }
+.slot h3 { font-size: 22px; }
+.slot p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+.slot button { justify-self: start; font: 800 14px var(--f-body); color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+@media (max-width: 860px) { .slots { grid-template-columns: 1fr; } .slot { grid-template-columns: 150px minmax(0, 1fr); grid-template-rows: auto; } .slot .pic { aspect-ratio: auto; height: 100%; min-height: 250px; border-bottom: 0; border-right: var(--line); } }
+
+/* GUIA */
+.course { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 36px; align-items: center; margin-top: 30px; }
+.course .cover { aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; border: var(--line); max-width: 340px; box-shadow: var(--pop); background: var(--white); }
+.course .cover img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+.mods { counter-reset: m; list-style: none; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+.mods li { counter-increment: m; display: flex; gap: 10px; font-size: 16px; font-weight: 700; }
+.mods li::before { content: counter(m, decimal-leading-zero); font-family: var(--f-mono); color: var(--laranja); }
+@media (max-width: 860px) { .course { grid-template-columns: 1fr; } .mods { grid-template-columns: 1fr; } }
+
+/* FAQ */
+.faq { margin-top: 26px; display: grid; gap: 10px; max-width: 820px; }
+details { border: var(--line); border-radius: 14px; background: var(--white); padding: 0 18px; }
+summary { cursor: pointer; padding: 15px 0; font-weight: 800; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-family: var(--f-display); color: var(--laranja); font-size: 22px; line-height: 1; }
+details[open] summary::after { content: "−"; }
+details p { margin: 0 0 16px; color: var(--ink-soft); }
+
+/* FOOTER */
+footer { background: var(--ink); color: #e9e2d8; padding-block: 44px 56px; font-size: 15px; }
+footer .wrap { display: grid; gap: 22px; }
+footer .top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+footer nav a { text-decoration: none; font-weight: 700; }
+footer nav a:hover { color: var(--sun); }
+footer .copy { user-select: all; color: var(--sun); font-family: var(--f-mono); }
+.closing { font-family: var(--f-display); font-size: 26px; color: var(--white); }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#topo"><img src="img/avatar.jpg" alt=""><span><b>ZÉ DO <span>ZERO</span></b><small>DO ZERO AO TOPO</small></span></a>
+    <ul>
+      <li><a href="#episodios">Episódios</a></li>
+      <li><a href="#placa">Placa da obra</a></li>
+      <li><a href="#anuncie">Sua marca na cena</a></li>
+      <li><a href="#guia">Bastidores</a></li>
+    </ul>
+    <a class="btn btn-sun" href="#banca">Entrar na história</a>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow" id="heroEyebrow">Série em desenho · EP.1 no ar</span>
+        <h1>O Zé tem <span class="zero">R$ 0</span>.<br><em>Você decide o resto.</em></h1>
+        <p class="lead">José Santos, 21 anos. O pai, Seu Tonho, é pedreiro e está sem obra desde que a coluna travou. São R$ 2.600 de dívida, a geladeira só tem arroz e hoje apareceu um aviso de despejo na porta: 7 dias. Cada passo do Zé é decidido nos comentários do Reel.</p>
+        <div class="actions">
+          <a class="btn btn-sun" href="#banca" id="heroBuy">Colocar meu @ na história</a>
+          <a class="btn btn-white" id="igLink" href="#" target="_blank" rel="noopener">Assistir o EP.1</a>
+        </div>
+        <div class="alert" role="status">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="alertText">EP.2: vagas abertas na banca do Zé.</span>
+          <span>Fecha em <span class="cd" id="cd1">--:--:--</span></span>
+        </div>
+      </div>
+      <div class="phone">
+        <img src="img/hero.jpg" alt="O Zé, de boné amarelo, segura o aviso de despejo na rua à noite">
+        <div class="hud">
+          <div class="ep" id="hudEp">DO ZERO AO TOPO • EP.1</div>
+          <div class="pills"><span class="pill g"><i class="coin" aria-hidden="true"></i><span id="hudSaldo">R$ 0,00</span></span><span class="pill r" id="hudDebt">DÍVIDA R$ 2.600</span></div>
+        </div>
+        <div class="cap">um papel <span>na porta…</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="votacao" class="vote-band">
+    <div class="wrap">
+      <span class="eyebrow" id="voteEyebrow">Votação aberta</span>
+      <h2 id="voteTitle">Faltam 7 dias. <em>Qual é o primeiro corre?</em></h2>
+      <p class="lead" id="voteLead">Comenta A ou B no Reel. A opção mais comentada vira o próximo episódio. Nenhuma das duas é fácil.</p>
+      <div class="vote" id="voteBox"></div>
+      <div class="vote-foot">
+        <a class="btn btn-sun" id="voteLink" href="#" target="_blank" rel="noopener">Comentar no Reel</a>
+        <span>Comentar é de graça, e pagar não compra o resultado.</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">Entre na série</span>
+      <h2>Três jeitos de <em>entrar na história.</em></h2>
+      <p class="lead">O Zé não ganha nada com isso, porque ele é um desenho. Quem ganha é a série, que continua saindo todo dia.</p>
+      <div class="offers">
+        <article class="offer">
+          <div class="pic"><img src="img/banca_ze.jpg" alt="O Zé atrás da banca de fones e capinhas na feira" style="object-position:50% 58%"></div>
+          <div class="body">
+            <h3>Seu @ na banca</h3>
+            <div class="price" id="offerAtPrice">R$ 9,90 <small>por episódio · Pix</small></div>
+            <p>Seu @ vira cliente da banca do Zé: aparece na cena, na legenda e ganha um número de cliente que é seu pra sempre.</p>
+            <a class="btn btn-sun" href="#banca">Quero ser cliente</a>
+          </div>
+        </article>
+        <article class="offer">
+          <div class="pic"><img src="img/lava.jpg" alt="O Zé com balde e esponja ao lado de um carro vermelho" style="object-position:50% 52%"></div>
+          <div class="body">
+            <h3>Sua marca na cena</h3>
+            <div class="price" id="offerBizPrice">a partir de R$ 49</div>
+            <p>A feira, o lava-rápido de rua, o mercadinho do fiado, a loja de material de construção. Sua marca pode estar em qualquer um desses lugares.</p>
+            <a class="btn btn-white" href="#anuncie">Ver os formatos</a>
+          </div>
+        </article>
+        <article class="offer">
+          <div class="pic"><img src="img/guia.jpg" alt="Ficha de personagem do Zé com as expressões" style="object-position:50% 8%"></div>
+          <div class="body">
+            <h3>Como a série é feita</h3>
+            <div class="price" id="offerGuidePrice">R$ 29,90 <small>· Pix ou cartão · PDF na hora</small></div>
+            <p>Os bastidores de uma série em desenho com votação: roteiro, personagens com IA, voz do narrador e edição com placar.</p>
+            <a class="btn btn-white" href="#guia">Quero o guia</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="banca" class="banca-band">
+    <div class="wrap">
+      <span class="eyebrow">Clientes da banca</span>
+      <h2>Seu @ dentro do episódio. <em>Na banca do Zé.</em></h2>
+      <p class="lead">O Zé vai precisar de clientes. O seu @ pode ser um deles: aparece numa plaquinha da banca, num balão de pedido, na lista de clientes ou nos créditos do episódio.</p>
+      <div class="cump">
+        <div class="post" aria-label="Exemplo de como seu @ aparece no Reel">
+          <div class="head"><img src="img/avatar.jpg" alt=""><span id="postHandle">josedozero</span></div>
+          <div class="media">
+            <img src="img/banca_ze.jpg" alt="O Zé atrás da banca na feira">
+            <div class="tag" id="postTag">CLIENTE 007 · @seu.arroba</div>
+          </div>
+          <div class="txt"><b id="postHandle2">josedozero</b> <span id="postPart">EP.2</span> · Zé do Zero 🧢<br>Clientes da banca neste episódio: <span class="at">@seu.arroba</span></div>
+        </div>
+        <div>
+          <div class="benefits">
+            <div class="benefit"><span class="k">NA CENA</span><b>Dentro do episódio</b><span>Numa plaquinha da banca, num balão de pedido ou nos créditos.</span></div>
+            <div class="benefit"><span class="k">NA LEGENDA</span><b>Seu @ no post</b><span>Quem assistir chega no seu perfil com um toque.</span></div>
+            <div class="benefit"><span class="k">PRA SEMPRE</span><b>Número de cliente</b><span>Cliente 001, 002, 003… por ordem de chegada. O número é seu.</span></div>
+            <div class="benefit"><span class="k">NA PLACA</span><b>Placa da obra</b><span>Quanto mais episódios, mais alto seu nome na placa da Santos &amp; Filho.</span></div>
+          </div>
+          <div class="counters">
+            <div class="counter"><b id="vagasLeft">30</b><span id="vagasLabel">vagas na banca do EP.2</span></div>
+            <div class="counter"><b id="cd2">--:--:--</b><span>para a banca fechar</span></div>
+          </div>
+          <div class="formcard">
+            <form id="cForm" novalidate>
+              <label class="f" for="cAt">Seu @ no Instagram
+                <input type="text" id="cAt" placeholder="@seu.arroba" autocomplete="off" autocapitalize="off" spellcheck="false">
+              </label>
+              <label class="f" for="cMail">Seu e-mail (pro comprovante)
+                <input type="email" id="cMail" placeholder="voce@email.com" autocomplete="email">
+              </label>
+              <label class="check" for="cOk"><input type="checkbox" id="cOk"><span>Concordo em aparecer como cliente da banca numa história de ficção, com meu @ visível no vídeo, na legenda e neste site. Sei que o valor paga a aparição e não é doação.</span></label>
+              <p class="err" id="cErr" role="alert"></p>
+              <button class="btn btn-verde" type="submit" id="cBtn">Entrar na banca por R$ 9,90 no Pix</button>
+              <p class="fine" id="nextNum">O próximo cliente da banca é o nº 001.</p>
+            </form>
+          </div>
+          <div id="pixBox" hidden></div>
+          <div class="rules"><b>Como funciona:</b> cada passe vale um episódio. Pagou antes da banca fechar e ainda tinha vaga, seu @ entra no próximo episódio; depois disso, entra no seguinte. Para aparecer de novo, compre de novo. O seu número de cliente continua o mesmo. O passe não mexe no placar do Zé nem na votação.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="placa">
+    <div class="wrap">
+      <span class="eyebrow">Placa da obra</span>
+      <h2>Quem está na <em>placa da Santos &amp; Filho.</em></h2>
+      <div class="wanted">
+        <div class="board"><img src="img/sonho.jpg" alt="O Zé e o pai comemorando na frente da loja Santos &amp; Filho Reformas"><span class="stamp ok">INAUGURAÇÃO</span></div>
+        <div>
+          <p class="lead" style="margin-top:0">Todo cliente que aparece na série entra na placa da obra. Quem aparece em mais episódios fica mais alto na placa, e o empate fica com quem chegou primeiro. Os três primeiros ganham um retrato desenhado no traço da série no episódio da inauguração.</p>
+          <ol class="rank" id="rank"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="episodios" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Episódios</span>
+      <h2>Do zero <em>até aqui.</em></h2>
+      <p class="lead">Chegou agora? Comece pelo EP.1. O carimbo mostra o que os comentários decidiram.</p>
+      <div class="chapters" id="chapters"></div>
+    </div>
+  </section>
+
+  <section id="dicas" class="dicas-band">
+    <div class="wrap">
+      <span class="eyebrow">Na vida real</span>
+      <h2>A história é inventada. <em>O direito, não.</em></h2>
+      <p class="lead">Cada episódio vem com uma dica real sobre o problema que o Zé está vivendo. É informação geral, não é aconselhamento jurídico.</p>
+      <div class="rastros" id="dicaCards"></div>
+    </div>
+  </section>
+
+  <section id="anuncie">
+    <div class="wrap">
+      <span class="eyebrow">Para negócios</span>
+      <h2>Sua marca <em>na cena.</em></h2>
+      <p class="lead">A série se passa na periferia: a feira de domingo, o lava-rápido de rua, o mercadinho do fiado, a loja de material de construção. Sua marca pode estar na placa, no balde ou na sacola, numa cena que as pessoas assistem até o fim pra saber o que o Zé vai fazer.</p>
+      <div class="stats" id="stats"></div>
+      <div class="tiers" id="tiers"></div>
+      <div class="slots">
+        <article class="slot">
+          <div class="pic"><img src="img/banca.jpg" alt="A banca do Zé na feira, com a faixa do balcão lisa">
+            <div class="hint" style="left:50%;top:64.5%;width:76%;height:6.5%"></div>
+            <div class="mark" style="left:50%;top:64.5%;width:72%;font-size:clamp(13px,1.7vw,20px)">SUA MARCA NA BANCA</div></div>
+          <div class="body"><span class="lim">LOCAÇÃO · EP.2</span><h3>A faixa da banca</h3><p>Se o público escolher a feira, o Zé monta a banca aqui. A faixa do balcão aparece em toda a cena.</p><button type="button" data-t>Ver com a marca</button></div>
+        </article>
+        <article class="slot">
+          <div class="pic"><img src="img/lava.jpg" alt="O Zé lavando um carro vermelho, a porta do carro lisa">
+            <div class="hint" style="left:35.5%;top:55.6%;width:40%;height:5.5%"></div>
+            <div class="mark" style="left:35.5%;top:55.6%;width:38%;font-size:clamp(10px,1.3vw,15px);transform:translate(-50%,-50%) rotate(-3deg)">SEU LAVA-RÁPIDO</div></div>
+          <div class="body"><span class="lim">APARIÇÃO · EP.2</span><h3>A porta do carro</h3><p>Se o público escolher lavar carro, o carro do primeiro cliente do Zé leva a sua marca.</p><button type="button" data-t>Ver com a marca</button></div>
+        </article>
+        <article class="slot">
+          <div class="pic"><img src="img/gas.jpg" alt="Cozinha do Zé com as contas de remédio e gás pagas na parede">
+            <div class="hint" style="left:65.9%;top:31.9%;width:29%;height:20.5%"></div>
+            <div class="mark" style="left:65.9%;top:31.9%;width:27%;height:19%;font-size:clamp(10px,1.3vw,15px)">SEU GÁS<br>OU FARMÁCIA<br>AQUI</div></div>
+          <div class="body"><span class="lim">APARIÇÃO · TODO EPISÓDIO</span><h3>As contas da cozinha</h3><p>O gás e o remédio do Seu Tonho voltam sempre que o dinheiro aperta. Bom lugar para uma distribuidora ou uma farmácia do bairro.</p><button type="button" data-t>Ver com a marca</button></div>
+        </article>
+      </div>
+      <p class="fine" style="margin-top:12px">Cenas da série. Enquanto não há anunciante, esses espaços vão ao ar lisos. Em cada novo episódio entram novos espaços.</p>
+      <div class="two">
+        <div class="rules" style="margin-top:0"><b>Regras:</b> você aprova a cena antes de pagar. Toda aparição leva #publi. Sua marca nunca aparece ligada a dívida, despejo ou golpe. As vagas seguem a ordem de pagamento, episódio a episódio. Não aceitamos apostas, cripto, empréstimo fácil, conteúdo adulto nem armas.</div>
+        <div class="formcard">
+          <form id="bForm" novalidate>
+            <h3 style="font-size:26px">Quero minha marca na cena</h3>
+            <label class="f" for="bName">Nome do negócio<input type="text" id="bName"></label>
+            <label class="f" for="bIg">Instagram do negócio<input type="text" id="bIg" placeholder="@seunegocio" autocapitalize="off"></label>
+            <label class="f" for="bYou">Seu nome<input type="text" id="bYou"></label>
+            <label class="f" for="bFmt">Formato<select id="bFmt"></select></label>
+            <label class="f" for="bIdea">O que você vende e em que cena imagina sua marca (opcional)<textarea id="bIdea"></textarea></label>
+            <p class="err" id="bErr" role="alert"></p>
+            <button class="btn btn-sun" type="submit">Preparar mensagem no WhatsApp</button>
+            <p class="fine">Quer patrocinar a temporada inteira? Escolha "Patrocínio" e conte o que você imagina.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="guia" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Bastidores</span>
+      <h2>Como a série <em>é feita.</em></h2>
+      <div class="course">
+        <div class="cover"><img src="img/guia.jpg" alt="Ficha de personagem do Zé"></div>
+        <div>
+          <p class="lead" style="margin-top:0">O guia "Bastidores" mostra como uma ideia vira uma série em desenho com votação, com os prompts usados em cada episódio. São 15 páginas em PDF, direto ao ponto.</p>
+          <ol class="mods">
+            <li>Premissa e gancho fixo</li>
+            <li>Temporada inteira antes do episódio 1</li>
+            <li>Enquete: o que o público ensinou</li>
+            <li>Personagens que não mudam de cara</li>
+            <li>30 cortes e animações no Flow</li>
+            <li>A voz do narrador no Fish Audio</li>
+            <li>Edição com placar, legendas e carimbos</li>
+            <li>Ganhar dinheiro com Pix e marcas</li>
+          </ol>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
+            <a class="btn btn-verde" id="guideBuy" href="#" target="_blank" rel="noopener">Comprar o guia por R$ 29,90</a>
+          </div>
+          <p class="fine" style="margin-top:10px">Pagamento seguro pela Cakto: Pix, cartão ou PicPay. O PDF chega no seu e-mail logo após a confirmação.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Perguntas</span>
+      <h2>Antes de <em>entrar na banca.</em></h2>
+      <div class="faq">
+        <details><summary>O Zé existe de verdade?</summary><p>Não. O Zé, o Seu Tonho e a história são inventados. As dicas de direito nos cards verdes são reais.</p></details>
+        <details><summary>O Pix vai para o Zé?</summary><p>Não. O Zé é um personagem de desenho. O valor paga a aparição do seu @ no episódio e vai para o criador da série. Não é doação e não muda o placar do Zé.</p></details>
+        <details><summary>O placar em reais do Zé é dinheiro de verdade?</summary><p>Não. É o jogo da série: cada seguidor da página vale R$ 1 no placar do personagem. Ninguém recebe esse valor.</p></details>
+        <details><summary>Como eu voto?</summary><p>Abra o Reel do episódio e comente A ou B. A opção mais comentada vira o próximo episódio. Comentar é de graça.</p></details>
+        <details><summary>Pagar muda a votação?</summary><p>Não. O passe só coloca seu @ dentro do episódio. Quem decide a história são os comentários.</p></details>
+        <details><summary>Até quando dá pra entrar na banca?</summary><p>Até o horário de fechamento mostrado acima ou até acabarem as vagas. Depois disso, seu @ entra no episódio seguinte.</p></details>
+        <details><summary>Preciso pagar de novo a cada episódio?</summary><p>Sim. Cada passe vale um episódio. Seu número de cliente continua o mesmo.</p></details>
+        <details><summary>Errei meu @. E agora?</summary><p>Mande uma mensagem no WhatsApp antes da banca fechar, com o código do seu pagamento.</p></details>
+        <details><summary>E se o episódio atrasar?</summary><p>Seu @ entra no próximo episódio publicado. Se não houver próximo, devolvemos o valor.</p></details>
+        <details><summary>Quais @ não entram?</summary><p>Perfis com conteúdo ofensivo, golpe, apostas ou propaganda proibida. Nesses casos, devolvemos o valor.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <div><div class="closing">O Zé é inventado. O caminho pra sair do zero, não.</div><div style="margin-top:6px">Uma série em desenho no Instagram sobre começar do nada. Toda semana, o público decide o próximo passo.</div></div>
+      <nav aria-label="Rodapé">
+        <a href="#banca">Seu @ na banca</a><a href="#placa">Placa da obra</a><a href="#episodios">Episódios</a><a href="#anuncie">Sua marca na cena</a><a href="#guia">Bastidores</a><a id="igFoot" href="#" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+    </div>
+    <div>WhatsApp: <span class="copy" id="waText"></span><span id="mailWrap"> · E-mail: <span class="copy" id="mailText"></span></span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO — é só isto que muda a cada episódio
+   ===================================================================== */
+const CONFIG = {
+  instagram: "josedozero",              // seu @ sem o arroba
+  whatsapp: "551152360210",             // DDI + DDD + número, só dígitos
+  email: "contato@seudominio.com",
+  pix: {
+    chave: "SUA-CHAVE-PIX",             // CPF, CNPJ, e-mail, celular (+55...) ou chave aleatória
+    nome: "SEU NOME",                   // nome do recebedor (até 25 letras)
+    cidade: "SAO PAULO",                // cidade do recebedor (até 15 letras)
+    valor: 9.90
+  },
+  guia: { preco: 29.90, checkout: "https://pay.cakto.com.br/3biir8j_1280222" },
+  proxima: {
+    ep: 2,
+    fecha: "2026-11-06T20:00:00-03:00", // fecha a banca (passes pagos até aqui entram no próximo episódio)
+    vagas: 30,
+    vendidas: 0
+  },
+  placar: { saldo: "R$ 0,00", divida: "DÍVIDA R$ 2.600" },
+  votacao: {
+    ep: 1,
+    reel: "",                            // link do Reel da votação
+    resultado: null,                     // ex.: [58, 42] quando a votação fecha
+    manchete: "",
+    resumo: "",
+    opcoes: [
+      { palavra: "LAVAR CARRO NA RUA", preco: "lucro pequeno · seguro", texto: "Balde, esponja e a calçada da avenida. Entra pouco por carro, mas entra todo dia e não precisa de dinheiro pra começar." },
+      { palavra: "REVENDER NA FEIRA", preco: "arriscado · pode dobrar", texto: "Comprar fone e capinha no atacado e montar uma banca no domingo. Se vender tudo, dobra o dinheiro. Se encalhar, o Zé fica sem nada." }
+    ]
+  },
+  episodios: [
+    { ep: 1, titulo: "Zero reais e 7 dias", capa: "img/capa.jpg", reel: "", escolha: null, pct: null }
+  ],
+  dicas: [
+    { n: 1, titulo: "Despejo só com ordem do juiz", texto: "Seja qual for o motivo, o dono do imóvel precisa entrar com uma ação de despejo na Justiça para retomar a casa. Um bilhete na porta não obriga ninguém a sair.", fonte: "Lei 8.245/1991 (Lei do Inquilinato), art. 5º" },
+    { n: 2, titulo: "Dá para pagar e ficar", texto: "Na ação de despejo por aluguel atrasado, o inquilino pode evitar a saída pagando a dívida atualizada, com multa, juros e custas, em até 15 dias depois de ser citado.", fonte: "Lei 8.245/1991, art. 62, inciso II" },
+    { n: 3, titulo: "Desconto na conta de luz", texto: "Famílias inscritas no CadÚnico com renda de até meio salário mínimo por pessoa têm direito à Tarifa Social de Energia Elétrica. O pedido é feito na distribuidora de energia.", fonte: "Lei 12.212/2010 (Tarifa Social de Energia Elétrica)" }
+  ],
+  clientes: [
+    // { at: "@exemplo", episodios: 2 }   — ordem de chegada = número de cliente
+  ],
+  stats: [ ["EP.1", "no ar"], ["A ou B", "o público decide cada episódio"], ["3", "espaços de marca por episódio"], ["Periferia", "onde a história se passa"] ],
+  formatos: [
+    { nome: "Aparição", preco: 49, lim: "ATÉ 3 POR EPISÓDIO", itens: ["Nome ou logo numa placa, balde, sacola ou na tela do celular", "No mínimo 2 segundos na tela", "Marcação na legenda"] },
+    { nome: "Locação", preco: 149, lim: "1 POR EPISÓDIO", itens: ["Uma cena inteira no seu negócio (o Zé passa por lá)", "Fachada legível", "Marcação na legenda"], hl: true },
+    { nome: "Destaque", preco: 299, lim: "1 POR EPISÓDIO", itens: ["Tudo da Locação", "O Zé usa o seu produto", "O narrador fala o nome do negócio", "Comentário fixado"] }
+  ]
+};
+/* ===================================================================== */
+
+const $ = (id) => document.getElementById(id);
+const brl = (v) => "R$ " + v.toFixed(2).replace(".", ",");
+const wa = (msg) => "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg);
+const igUrl = "https://instagram.com/" + CONFIG.instagram;
+const pad3 = (n) => String(n).padStart(3, "0");
+
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === "class") e.className = v; else e.setAttribute(k, v); }
+  for (const k of kids) e.append(k);
+  return e;
+}
+
+/* ---------- links & texts ---------- */
+for (const id of ["igLink", "igFoot"]) $(id).href = igUrl;
+$("voteLink").href = CONFIG.votacao.reel || igUrl;
+$("waText").textContent = "+" + CONFIG.whatsapp;
+if (!CONFIG.email || CONFIG.email.includes("seudominio")) $("mailWrap").hidden = true; else $("mailText").textContent = CONFIG.email;
+$("postHandle").textContent = CONFIG.instagram;
+$("postHandle2").textContent = CONFIG.instagram;
+const P = CONFIG.proxima.ep;
+const lastEp = CONFIG.episodios.length;
+$("postPart").textContent = "EP." + P;
+$("alertText").textContent = `EP.${P}: vagas abertas na banca do Zé.`;
+$("vagasLabel").textContent = `vagas na banca do EP.${P}`;
+$("hudEp").textContent = `DO ZERO AO TOPO • EP.${lastEp}`;
+$("igLink").textContent = lastEp > 1 ? "Assistir desde o EP.1" : "Assistir o EP.1";
+$("voteEyebrow").textContent = CONFIG.votacao.resultado ? `Resultado · EP.${CONFIG.votacao.ep}` : `Votação aberta · EP.${CONFIG.votacao.ep} decide o EP.${CONFIG.votacao.ep + 1}`;
+$("heroEyebrow").textContent = `Série em desenho · EP.${lastEp} no ar`;
+const left = Math.max(0, CONFIG.proxima.vagas - CONFIG.proxima.vendidas);
+$("vagasLeft").textContent = left;
+$("nextNum").textContent = `O próximo cliente da banca é o nº ${pad3(CONFIG.clientes.length + 1)}.`;
+$("offerBizPrice").textContent = "a partir de R$ " + Math.min(...CONFIG.formatos.map(f => f.preco));
+$("offerAtPrice").firstChild.textContent = brl(CONFIG.pix.valor) + " ";
+$("cBtn").textContent = `Entrar na banca por ${brl(CONFIG.pix.valor)} no Pix`;
+
+/* ---------- HUD ---------- */
+$("hudSaldo").textContent = CONFIG.placar.saldo;
+if (CONFIG.placar.divida) $("hudDebt").textContent = CONFIG.placar.divida; else $("hudDebt").hidden = true;
+
+/* ---------- countdown ---------- */
+function tick() {
+  const ms = new Date(CONFIG.proxima.fecha) - new Date();
+  let s;
+  if (ms <= 0) s = "fechada";
+  else {
+    const h = Math.floor(ms / 3.6e6), m = Math.floor(ms / 6e4) % 60, sec = Math.floor(ms / 1e3) % 60;
+    s = (h > 99 ? h : String(h).padStart(2, "0")) + ":" + String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+  }
+  $("cd1").textContent = s; $("cd2").textContent = s;
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- vote ---------- */
+const V = CONFIG.votacao;
+if (V.resultado) {
+  $("voteTitle").innerHTML = V.manchete;
+  $("voteLead").textContent = V.resumo;
+  $("voteLink").textContent = "Ver os comentários no Reel";
+}
+V.opcoes.forEach((o, i) => {
+  const won = V.resultado && V.resultado[i] === Math.max(...V.resultado);
+  $("voteBox").append(el("div", { class: "opt " + (i ? "b" : "a") },
+    el("div", { class: "letter", "aria-hidden": "true" }, i ? "B" : "A"),
+    el("div", { class: "cost" }, (V.resultado ? V.resultado[i] + "% dos comentários" + (won ? " · venceu" : "") : "Opção " + (i ? "B" : "A")) + " · " + o.preco),
+    el("div", { class: "word" }, o.palavra),
+    el("p", {}, o.texto)));
+});
+
+/* ---------- ranking ---------- */
+const API = CONFIG.api || "/api";
+function renderRank(list) {
+  $("rank").replaceChildren();
+  if (!list.length) {
+    $("rank").append(el("li", { class: "empty" }, el("span", { class: "h" }, "A placa ainda está vazia. O cliente nº 001 pode ser você.")));
+    return;
+  }
+  list.slice(0, 10).forEach(c => $("rank").append(el("li", {},
+    el("span", { class: "h" }, c.at), el("span", { class: "n" }, "CLIENTE " + pad3(c.num)))));
+}
+renderRank(CONFIG.clientes.map((c, i) => ({ ...c, num: i + 1 })).sort((a, b) => b.episodios - a.episodios || a.num - b.num));
+// Dados ao vivo do Mercado Pago (quando o site está no Netlify com as funções /api)
+fetch(API + "/public?part=" + P).then(r => r.ok ? r.json() : null).then(d => {
+  if (!d) return;
+  renderRank(d.rank.map(c => ({ at: c.at, num: c.number, episodios: c.capitulos })));
+  $("vagasLeft").textContent = Math.max(0, CONFIG.proxima.vagas - d.sold);
+  $("nextNum").textContent = `O próximo cliente da banca é o nº ${pad3(d.next)}.`;
+}).catch(() => {});
+
+/* ---------- episodes ---------- */
+CONFIG.episodios.forEach(c => {
+  const cv = el("div", { class: "cv" }, el("img", { src: c.capa, alt: "Capa do EP." + c.ep, loading: "lazy" }));
+  cv.append(c.escolha ? el("span", { class: "stamp" }, c.escolha + (c.pct ? " " + c.pct + "%" : "")) : el("span", { class: "stamp ok" }, "VOTAÇÃO ABERTA"));
+  $("chapters").append(el("a", { class: "chap", href: c.reel || igUrl, target: "_blank", rel: "noopener" },
+    cv, el("span", { class: "meta" }, "EP." + c.ep + " · NO AR"), el("span", { class: "t" }, c.titulo)));
+});
+$("chapters").append(el("div", { class: "chap soon" }, el("div", { class: "cv" }, el("span", {}, "EP." + P + " · os comentários decidem")), el("span", { class: "meta" }, "EP." + P + " · EM PRODUÇÃO"), el("span", { class: "t" }, "A ou B?")));
+
+/* ---------- dicas ---------- */
+CONFIG.dicas.forEach(r => $("dicaCards").append(el("article", { class: "rastro" },
+  el("span", { class: "n" }, "DICA REAL #" + r.n), el("h3", {}, r.titulo), el("p", {}, r.texto), el("span", { class: "src" }, r.fonte))));
+$("dicaCards").append(el("article", { class: "rastro soon" },
+  el("span", { class: "n" }, "DICA REAL #" + (CONFIG.dicas.length + 1)), el("p", {}, "Sai junto com o EP." + P + ". O Zé ainda não sabe que vai precisar dela.")));
+
+/* ---------- stats & tiers ---------- */
+CONFIG.stats.forEach(([v, l]) => $("stats").append(el("div", { class: "stat" }, el("b", {}, v), el("span", {}, l))));
+CONFIG.formatos.forEach(f => {
+  const ul = el("ul"); f.itens.forEach(x => ul.append(el("li", {}, x)));
+  $("tiers").append(el("div", { class: "tier" + (f.hl ? " hl" : "") }, el("span", { class: "lim" }, f.lim), el("h3", {}, f.nome), el("div", { class: "price" }, "R$ " + f.preco), ul));
+  $("bFmt").append(el("option", { value: f.nome }, `${f.nome} · R$ ${f.preco}`));
+});
+$("bFmt").append(el("option", { value: "Patrocínio" }, "Patrocínio de temporada · sob consulta"));
+
+/* ---------- Pix (BR Code estático, padrão do Banco Central) ---------- */
+function emv(id, v) { return id + String(v.length).padStart(2, "0") + v; }
+function crc16(s) {
+  let c = 0xFFFF;
+  for (let i = 0; i < s.length; i++) {
+    c ^= s.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF;
+  }
+  return c.toString(16).toUpperCase().padStart(4, "0");
+}
+const clean = (s, n) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9 ]/g, "").toUpperCase().slice(0, n);
+function pixCode(txid) {
+  const p = CONFIG.pix;
+  let s = emv("00", "01") + emv("26", emv("00", "br.gov.bcb.pix") + emv("01", p.chave)) + emv("52", "0000") + emv("53", "986")
+    + emv("54", p.valor.toFixed(2)) + emv("58", "BR") + emv("59", clean(p.nome, 25)) + emv("60", clean(p.cidade, 15))
+    + emv("62", emv("05", txid)) + "6304";
+  return s + crc16(s);
+}
+
+function copyButton(text, codeBox) {
+  const b = el("button", { class: "btn btn-verde", type: "button" }, "Copiar código Pix");
+  b.addEventListener("click", () => {
+    navigator.clipboard.writeText(text).then(() => b.textContent = "Copiado ✓").catch(() => {
+      const r = document.createRange(); r.selectNodeContents(codeBox); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      b.textContent = "Selecionado: copie manualmente";
+    });
+  });
+  return b;
+}
+
+$("cForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let at = $("cAt").value.trim().replace(/\s+/g, "");
+  if (at && !at.startsWith("@")) at = "@" + at;
+  const mail = $("cMail").value.trim();
+  if (!/^@[A-Za-z0-9._]{1,30}$/.test(at)) return $("cErr").textContent = "Digite um @ válido do Instagram (letras, números, ponto e _).";
+  if (!/^\S+@\S+\.\S+$/.test(mail)) return $("cErr").textContent = "Digite um e-mail válido para receber a confirmação.";
+  if (!$("cOk").checked) return $("cErr").textContent = "Marque a caixa de aceite para continuar.";
+  $("cErr").textContent = "";
+  const btn = $("cBtn"); const label = btn.textContent;
+  btn.disabled = true; btn.textContent = "Gerando seu Pix…";
+  try {
+    const r = await fetch(API + "/pix", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ at, email: mail, part: P }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || "Não foi possível gerar o Pix agora. Tente de novo em instantes.");
+    showMP(at, d);
+  } catch (err) {
+    if (CONFIG.pix.chave && CONFIG.pix.chave !== "SUA-CHAVE-PIX") showPix(at, mail, "E" + P + Math.random().toString(36).slice(2, 7).toUpperCase());
+    else showPix(at, mail, null);
+  } finally { btn.disabled = false; btn.textContent = label; }
+});
+
+/* ---------- Pix pelo Mercado Pago (confirmação automática) ---------- */
+let pollTimer = null;
+function showMP(at, d) {
+  clearInterval(pollTimer);
+  const box = $("pixBox"); box.hidden = false; box.replaceChildren();
+  const qr = el("div", { class: "qr", "aria-label": "QR Code Pix" });
+  if (d.qrImg) qr.append(el("img", { src: "data:image/png;base64," + d.qrImg, alt: "QR Code do Pix" }));
+  else qr.textContent = "Use o Pix copia e cola";
+  const codeBox = el("div", { class: "code" }, d.qr || "");
+  const status = el("p", { class: "fine", role: "status" }, "Esperando o pagamento… o código vale 30 minutos.");
+  box.append(el("div", { class: "pix" }, qr, el("div", {},
+    el("span", { class: "eyebrow" }, "Pague " + brl(d.price || CONFIG.pix.valor) + " no Pix"),
+    el("h3", {}, at + ", sua vaga na banca está quase garantida."),
+    el("p", { class: "fine" }, "Pague pelo QR Code ou pelo Pix copia e cola. A confirmação é automática, não precisa mandar comprovante."),
+    codeBox, el("div", { class: "row" }, copyButton(d.qr || "", codeBox)), status)));
+  box.scrollIntoView({ behavior: "smooth", block: "center" });
+  const started = Date.now();
+  pollTimer = setInterval(async () => {
+    if (Date.now() - started > 31 * 60 * 1000) { clearInterval(pollTimer); status.textContent = "O código expirou. Gere um novo Pix."; return; }
+    try {
+      const r = await fetch(API + "/status?id=" + encodeURIComponent(d.id)); const s = await r.json();
+      if (s.status === "approved") {
+        clearInterval(pollTimer);
+        const n = pad3(s.number || 0);
+        box.replaceChildren(el("div", { class: "pix", style: "grid-template-columns:1fr" }, el("div", {},
+          el("span", { class: "eyebrow" }, "Pagamento confirmado"),
+          el("span", { class: "num", style: "font-size:52px;display:block" }, "CLIENTE Nº " + n),
+          el("h3", {}, at + ", você é cliente da banca do Zé."),
+          el("p", { class: "fine" }, `Seu @ entra no EP.${s.part || P}. A confirmação do Mercado Pago chega no seu e-mail. O número ${n} é seu pra sempre.`))));
+        fetch(API + "/public?part=" + P).then(r => r.json()).then(x => renderRank(x.rank.map(c => ({ at: c.at, num: c.number, episodios: c.capitulos })))).catch(() => {});
+      } else if (["rejected", "cancelled", "expired"].includes(s.status)) {
+        clearInterval(pollTimer); status.textContent = "O pagamento não foi concluído. Gere um novo Pix para tentar de novo.";
+      }
+    } catch (e) { /* tenta de novo no próximo ciclo */ }
+  }, 4000);
+}
+
+function showPix(at, mail, code) {
+  const box = $("pixBox"); box.hidden = false; box.replaceChildren();
+  if (!code) {
+    box.append(el("div", { class: "warn", style: "margin-top:16px" }, "Site em configuração: a chave Pix ainda não foi cadastrada. Volte em breve."));
+    return;
+  }
+  const payload = pixCode(code);
+  const qr = el("div", { class: "qr", "aria-label": "QR Code Pix" });
+  const codeBox = el("div", { class: "code" }, payload);
+  const msg = `Oi! Quero meu @ na banca do Zé no EP.${P}.\nMeu @: ${at}\nE-mail: ${mail}\nCódigo: ${code}\n(segue o comprovante)`;
+  const sendBtn = el("a", { class: "btn btn-sun", href: wa(msg), target: "_blank", rel: "noopener" }, "Enviar comprovante no WhatsApp");
+  box.append(el("div", { class: "pix" }, qr, el("div", {},
+    el("span", { class: "eyebrow" }, "Pague " + brl(CONFIG.pix.valor) + " no Pix"),
+    el("h3", {}, at + ", sua vaga na banca está quase garantida."),
+    el("p", { class: "fine" }, "1. Pague pelo QR Code ou pelo Pix copia e cola. 2. Mande o comprovante no WhatsApp com o código "),
+    el("span", { class: "num" }, code),
+    codeBox, el("div", { class: "row" }, copyButton(payload, codeBox), sendBtn))));
+  try { new QRCode(qr, { text: payload, width: 176, height: 176, correctLevel: QRCode.CorrectLevel.M }); }
+  catch (err) { qr.textContent = "Use o Pix copia e cola"; }
+  box.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+/* ---------- Guia em PDF: checkout na Cakto ---------- */
+$("offerGuidePrice").firstChild.textContent = brl(CONFIG.guia.preco) + " ";
+$("guideBuy").href = CONFIG.guia.checkout;
+$("guideBuy").textContent = "Comprar o guia por " + brl(CONFIG.guia.preco);
+
+document.querySelectorAll(".slot [data-t]").forEach(b => b.addEventListener("click", () => {
+  const s = b.closest(".slot"); const on = s.classList.toggle("on"); b.textContent = on ? "Ver sem a marca" : "Ver com a marca";
+}));
+$("bForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("bName").value.trim(), ig = $("bIg").value.trim(), you = $("bYou").value.trim();
+  if (!name || !you) return $("bErr").textContent = "Preencha o nome do negócio e o seu nome.";
+  $("bErr").textContent = "";
+  const msg = `Oi! Quero minha marca numa cena do Zé do Zero.\nNegócio: ${name}\nInstagram: ${ig || "-"}\nMeu nome: ${you}\nFormato: ${$("bFmt").value}\nIdeia: ${$("bIdea").value.trim() || "-"}`;
+  let go = $("bGo");
+  if (!go) { go = el("a", { id: "bGo", class: "btn btn-verde", target: "_blank", rel: "noopener" }, "Abrir o WhatsApp com a mensagem pronta"); $("bForm").append(go); }
+  go.href = wa(msg); go.focus();
+});
+</script>
+
+</body>
+</html>

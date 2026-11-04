@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Banca do Zé · Painel</title>
+<link rel="icon" href="img/avatar.jpg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700;800;900&family=DM+Mono:wght@500&display=swap">
+<style>
+:root { --paper: #fff6e5; --white: #fff; --ink: #1f1a17; --soft: #5c4f45; --sun: #ffd60a; --laranja: #ff7a1a; --verde: #1e9e4a; --vermelho: #e63946; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Nunito, system-ui, sans-serif; }
+main { max-width: 780px; margin: 0 auto; padding: 32px max(16px, env(safe-area-inset-left, 0px)) 64px max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 20px; }
+h1 { font: 400 34px "Lilita One", "Arial Black", sans-serif; margin: 0; } h1 span { color: var(--laranja); }
+form { display: flex; flex-wrap: wrap; gap: 10px; }
+input { background: var(--white); color: var(--ink); border: 3px solid var(--ink); border-radius: 12px; padding: 11px 14px; font: inherit; flex: 1 1 160px; min-width: 0; }
+button { background: var(--sun); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; padding: 10px 20px; font: 900 15px Nunito, sans-serif; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+button.o { background: var(--white); }
+.stats { display: flex; flex-wrap: wrap; gap: 12px; }
+.stat { flex: 1 1 140px; background: var(--white); border: 3px solid var(--ink); border-radius: 14px; padding: 12px 16px; }
+.stat b { display: block; font: 400 30px "Lilita One", sans-serif; color: var(--verde); font-variant-numeric: tabular-nums; }
+.stat span { color: var(--soft); font-size: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 2px solid var(--paper); }
+th { color: var(--soft); font: 500 12px "DM Mono", monospace; letter-spacing: .08em; }
+.wrap { overflow-x: auto; background: var(--white); border: 3px solid var(--ink); border-radius: 14px; }
+textarea { width: 100%; min-height: 90px; background: var(--white); color: var(--ink); border: 3px solid var(--ink); border-radius: 12px; padding: 12px; font: 14px "DM Mono", monospace; }
+.err { color: var(--vermelho); font-weight: 800; min-height: 1em; margin: 0; }
+.fine { color: var(--soft); font-size: 14px; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Banca do Zé <span>· painel</span></h1>
+  <p class="fine">Quem pagou o passe "Seu @ na banca" em cada episódio. Só abre com a senha que você cadastrou no Netlify (ADMIN_KEY).</p>
+  <form id="f">
+    <input id="key" type="password" placeholder="Senha do painel" autocomplete="current-password">
+    <input id="part" type="number" min="1" max="99" value="2" placeholder="Episódio">
+    <button type="submit">Ver clientes</button>
+  </form>
+  <p class="err" id="err" role="alert"></p>
+  <div class="stats" id="stats" hidden>
+    <div class="stat"><b id="sTotal">0</b><span>clientes pagos neste episódio</span></div>
+    <div class="stat"><b id="sRev">R$ 0,00</b><span>receita bruta</span></div>
+    <div class="stat"><b id="sPend">0</b><span>Pix gerados e não pagos</span></div>
+  </div>
+  <div id="out" hidden>
+    <p class="fine">Legenda pronta para o post:</p>
+    <textarea id="cap" readonly></textarea>
+    <p><button class="o" type="button" id="copy">Copiar legenda</button></p>
+    <div class="wrap"><table><thead><tr><th>CLIENTE</th><th>@</th><th>E-MAIL</th><th>PAGO EM</th><th>CÓDIGO</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+try { $("key").value = sessionStorage.getItem("k") || ""; } catch (e) {}
+$("f").addEventListener("submit", async (e) => {
+  e.preventDefault(); $("err").textContent = "";
+  try { sessionStorage.setItem("k", $("key").value); } catch (e) {}
+  const r = await fetch("/api/admin?part=" + encodeURIComponent($("part").value), { headers: { "x-admin-key": $("key").value } });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) { $("err").textContent = d.error || "Não foi possível carregar."; return; }
+  $("stats").hidden = false; $("out").hidden = false;
+  $("sTotal").textContent = d.total; $("sPend").textContent = d.pendentes;
+  $("sRev").textContent = "R$ " + d.receita.toFixed(2).replace(".", ",");
+  $("rows").replaceChildren(...d.aprovados.map(p => {
+    const tr = document.createElement("tr");
+    [String(p.cliente).padStart(3, "0"), p.at, p.email, new Date(p.pagoEm).toLocaleString("pt-BR"), p.codigo].forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.append(td); });
+    return tr;
+  }));
+  $("cap").value = d.aprovados.length ? "🧢 Clientes da banca neste episódio: " + d.aprovados.map(p => p.at).join(" ") : "Nenhum cliente pago neste episódio ainda.";
+});
+$("copy").addEventListener("click", () => {
+  navigator.clipboard.writeText($("cap").value).then(() => $("copy").textContent = "Copiado ✓").catch(() => { $("cap").select(); });
+});
+</script>
+</body>
+</html>
