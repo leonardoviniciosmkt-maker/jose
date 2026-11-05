@@ -289,8 +289,8 @@ footer .copy { user-select: all; color: var(--sun); font-family: var(--f-mono); 
     <div class="wrap hero-grid">
       <div>
         <span class="eyebrow" id="heroEyebrow">Série em desenho · EP.1 no ar</span>
-        <h1>O Zé tem <span class="zero">R$ 0</span>.<br><em>Você decide o resto.</em></h1>
-        <p class="lead">José Santos, 21 anos. O pai, Seu Tonho, é pedreiro e está sem obra desde que a coluna travou. São R$ 2.600 de dívida, a geladeira só tem arroz e hoje apareceu um aviso de despejo na porta: 7 dias. Cada passo do Zé é decidido nos comentários do Reel.</p>
+        <h1>O Zé tem <span class="zero">R$ 5,90</span>.<br><em>Você decide o resto.</em></h1>
+        <p class="lead">José Santos, 21 anos. Com a ajuda de vocês e 38 carros lavados na avenida, o Zé pagou o despejo até o último centavo. Mas o pai, Seu Tonho, precisa de fisioterapia para a coluna voltar: R$ 3.000 em 30 dias. Cada passo do Zé é decidido nos comentários do Reel.</p>
         <div class="actions">
           <a class="btn btn-sun" href="#banca" id="heroBuy">Colocar meu @ na história</a>
           <a class="btn btn-white" id="igLink" href="#" target="_blank" rel="noopener">Assistir o EP.1</a>
@@ -307,7 +307,7 @@ footer .copy { user-select: all; color: var(--sun); font-family: var(--f-mono); 
           <div class="ep" id="hudEp">DO ZERO AO TOPO • EP.1</div>
           <div class="pills"><span class="pill g"><i class="coin" aria-hidden="true"></i><span id="hudSaldo">R$ 0,00</span></span><span class="pill r" id="hudDebt">DÍVIDA R$ 2.600</span></div>
         </div>
-        <div class="cap">um papel <span>na porta…</span></div>
+        <div class="cap"><span>e agora</span>, Zé?</div>
       </div>
     </div>
   </section>
@@ -315,8 +315,8 @@ footer .copy { user-select: all; color: var(--sun); font-family: var(--f-mono); 
   <section id="votacao" class="vote-band">
     <div class="wrap">
       <span class="eyebrow" id="voteEyebrow">Votação aberta</span>
-      <h2 id="voteTitle">Faltam 7 dias. <em>Qual é o primeiro corre?</em></h2>
-      <p class="lead" id="voteLead">Comenta A ou B no Reel. A opção mais comentada vira o próximo episódio. Nenhuma das duas é fácil.</p>
+      <h2 id="voteTitle">Faltam 30 dias. <em>Como juntar R$ 3.000?</em></h2>
+      <p class="lead" id="voteLead">Comenta A ou B no Reel do EP.2. A opção mais comentada vira o próximo episódio. No EP.1, vocês escolheram lavar carro, e deu certo.</p>
       <div class="vote" id="voteBox"></div>
       <div class="vote-foot">
         <a class="btn btn-sun" id="voteLink" href="#" target="_blank" rel="noopener">Comentar no Reel</a>
@@ -563,30 +563,32 @@ const CONFIG = {
   },
   guia: { preco: 29.90, checkout: "https://pay.cakto.com.br/3dsx6tc_1282216" },
   proxima: {
-    ep: 2,
-    fecha: "2026-11-06T20:00:00-03:00", // fecha a banca (passes pagos até aqui entram no próximo episódio)
+    ep: 3,
+    fecha: "2026-11-06T08:00:00-03:00", // fecha a banca (passes pagos até aqui entram no próximo episódio)
     vagas: 30,
     vendidas: 0
   },
-  placar: { saldo: "R$ 0,00", divida: "DÍVIDA R$ 2.600" },
+  placar: { saldo: "R$ 5,90", divida: "FISIO R$ 3.000" },
   votacao: {
-    ep: 1,
+    ep: 2,
     reel: "",                            // link do Reel da votação
     resultado: null,                     // ex.: [58, 42] quando a votação fecha
     manchete: "",
     resumo: "",
     opcoes: [
-      { palavra: "LAVAR CARRO NA RUA", preco: "lucro pequeno · seguro", texto: "Balde, esponja e a calçada da avenida. Entra pouco por carro, mas entra todo dia e não precisa de dinheiro pra começar." },
-      { palavra: "REVENDER NA FEIRA", preco: "arriscado · pode dobrar", texto: "Comprar fone e capinha no atacado e montar uma banca no domingo. Se vender tudo, dobra o dinheiro. Se encalhar, o Zé fica sem nada." }
+      { palavra: "CONTINUAR NA AVENIDA", preco: "devagar · garantido", texto: "Balde, esponja e R$ 20 por carro. Cada centavo vai pro cofrinho da fisioterapia do Seu Tonho. Não tem risco, mas 30 dias passam rápido." },
+      { palavra: "LAVADORA EMPRESTADA", preco: "arriscado · pode triplicar", texto: "Pegar R$ 600 emprestado com o Seu Valdir, comprar uma lavadora de alta pressão e lavar carro na casa dos clientes. Se der certo, triplica. Se der errado, o Zé volta a ter dívida." }
     ]
   },
   episodios: [
-    { ep: 1, titulo: "Zero reais e 7 dias", capa: "img/capa.jpg", reel: "", escolha: null, pct: null }
+    { ep: 1, titulo: "Zero reais e 7 dias", capa: "img/capa.jpg", reel: "https://www.instagram.com/p/DfVXoK_ImLZ/", escolha: "A: LAVAR CARRO", pct: null },
+    { ep: 2, titulo: "Despejo pago. E agora o pai.", capa: "img/capa2.jpg", reel: "", escolha: null, pct: null }
   ],
   dicas: [
     { n: 1, titulo: "Despejo só com ordem do juiz", texto: "Seja qual for o motivo, o dono do imóvel precisa entrar com uma ação de despejo na Justiça para retomar a casa. Um bilhete na porta não obriga ninguém a sair.", fonte: "Lei 8.245/1991 (Lei do Inquilinato), art. 5º" },
     { n: 2, titulo: "Dá para pagar e ficar", texto: "Na ação de despejo por aluguel atrasado, o inquilino pode evitar a saída pagando a dívida atualizada, com multa, juros e custas, em até 15 dias depois de ser citado.", fonte: "Lei 8.245/1991, art. 62, inciso II" },
-    { n: 3, titulo: "Desconto na conta de luz", texto: "Famílias inscritas no CadÚnico com renda de até meio salário mínimo por pessoa têm direito à Tarifa Social de Energia Elétrica. O pedido é feito na distribuidora de energia.", fonte: "Lei 12.212/2010 (Tarifa Social de Energia Elétrica)" }
+    { n: 3, titulo: "Desconto na conta de luz", texto: "Famílias inscritas no CadÚnico com renda de até meio salário mínimo por pessoa têm direito à Tarifa Social de Energia Elétrica. O pedido é feito na distribuidora de energia.", fonte: "Lei 12.212/2010 (Tarifa Social de Energia Elétrica)" },
+    { n: 4, titulo: "Fisioterapia também existe no SUS", texto: "Com o encaminhamento do médico do posto de saúde, dá para fazer fisioterapia de graça pelo SUS. A fila pode demorar, então peça o encaminhamento o quanto antes, mesmo que pense em pagar particular.", fonte: "Lei 8.080/1990 (Lei Orgânica da Saúde), art. 7º, integralidade da assistência" }
   ],
   clientes: [
     // { at: "@exemplo", episodios: 2 }   — ordem de chegada = número de cliente
